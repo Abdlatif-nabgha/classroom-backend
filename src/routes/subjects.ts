@@ -10,8 +10,8 @@ router.get("/", async (req, res) => {
     try {
         const { search, departement, page = 1, limit = 10} = req.query;
 
-        const currentPage = Math.max(1, +page);
-        const limitPerPage = Math.max(1, +limit);
+        const currentPage = Math.max(1, parseInt(String(page), 10) || 1);
+        const limitPerPage = Math.max(1, Math.min(100, parseInt(String(limit), 10) || 10));
 
         const offset = (currentPage - 1) * limitPerPage;
 
@@ -29,19 +29,20 @@ router.get("/", async (req, res) => {
         
         // If departement filter exists, match departement name
         if (departement) {
-            filterConditions.push(ilike(departements.name, `%${departement}%`));
+            const deptPattern = `%${String(departement).replace(/[%_]/g, '\\$&')}%`;
+            filterConditions.push(ilike(departements.name, deptPattern));
         }
 
         // combine all filter using AND if any exists
         const whereClause = filterConditions.length > 0 ? and(...filterConditions) : undefined;
 
         const countResult = await db
-                        .select({ count: sql<number>`count(*)` })
+                        .select({ count: sql<number>`count(*)::int` })
                         .from(subjects)
                         .leftJoin(departements, eq(subjects.departementId, departements.id))
-                        .where(whereClause)
+                        .where(whereClause);
 
-        const totalCount = countResult[0]?.count ?? 0;
+        const totalCount = Number(countResult[0]?.count ?? 0);
 
         const subjectsList = await db
                         .select({

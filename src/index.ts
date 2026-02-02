@@ -6,6 +6,10 @@ import 'dotenv/config';
 const app = express();
 const PORT = 8000;
 
+if (!process.env.FRONTEND_URL) {
+    console.warn('Warning: FRONTEND_URL not set. CORS may not work as expected.');
+}
+
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
