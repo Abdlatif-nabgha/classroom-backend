@@ -4,8 +4,8 @@
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.departements": {
-      "name": "departements",
+    "public.departments": {
+      "name": "departments",
       "schema": "",
       "columns": {
         "id": {
@@ -15,7 +15,7 @@
           "notNull": true,
           "identity": {
             "type": "always",
-            "name": "departements_id_seq",
+            "name": "departments_id_seq",
             "schema": "public",
             "increment": "1",
             "startWith": "1",
@@ -62,12 +62,10 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "departements_code_unique": {
-          "name": "departements_code_unique",
+        "departments_code_unique": {
+          "name": "departments_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
+          "columns": ["code"]
         }
       },
       "policies": {},
@@ -95,8 +93,8 @@
             "cycle": false
           }
         },
-        "departement_id": {
-          "name": "departement_id",
+        "department_id": {
+          "name": "department_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -136,16 +134,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "subjects_departement_id_departements_id_fk": {
-          "name": "subjects_departement_id_departements_id_fk",
+        "subjects_department_id_departments_id_fk": {
+          "name": "subjects_department_id_departments_id_fk",
           "tableFrom": "subjects",
-          "tableTo": "departements",
-          "columnsFrom": [
-            "departement_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "tableTo": "departments",
+          "columnsFrom": ["department_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -155,9 +149,7 @@
         "subjects_code_unique": {
           "name": "subjects_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
+          "columns": ["code"]
         }
       },
       "policies": {},
